@@ -18,15 +18,14 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build Docker image with SHA tag
+      - name: Build Docker image with SHA and latest tags
         run: |
           IMAGE_NAME=ghcr.io/${{ github.repository }}
           GIT_SHA=${{ github.sha }}
           docker build -t $IMAGE_NAME:$GIT_SHA -t $IMAGE_NAME:latest .
-      - name: Push Docker image (SHA and latest)
+      - name: Push Docker images (SHA and latest)
         run: |
           IMAGE_NAME=ghcr.io/${{ github.repository }}
           GIT_SHA=${{ github.sha }}
           docker push $IMAGE_NAME:$GIT_SHA
-          docker tag $IMAGE_NAME:$GIT_SHA $IMAGE_NAME:latest
           docker push $IMAGE_NAME:latest
