@@ -3,16 +3,20 @@ auth:
   providers:
     github:
       production:
-        clientId: ${GITHUB_CLIENT_ID}
-        clientSecret: ${GITHUB_CLIENT_SECRET}
+        clientId: ${GITHUB_CLIENT_ID_PROD}
+        clientSecret: ${GITHUB_CLIENT_SECRET_PROD}
+        callbackUrl: https://backstage.bergtobias.com/api/auth/github/handler/frame
+        signIn:
+          resolvers:
+            - resolver: usernameMatchingUserEntityName
 kubernetes:
   clusterLocatorMethods:
-    - type: 'config'
+    - type: config
       clusters:
         - url: https://192.168.10.219:6443
           name: homelab
-          authProvider: 'serviceAccount'
-          skipTLSVerify: false # or true if you want to skip, but better to use caData
+          authProvider: serviceAccount
+          skipTLSVerify: false
           serviceAccountToken: ${K8_SERVICE_TOKEN}
           caData: ${K8_CA_DATA}
           namespace:

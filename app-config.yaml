@@ -4,65 +4,52 @@ app:
 organization:
   name: Vercevo
 backend:
-  # Used for enabling authentication, secret is shared by all backend plugins
-  # See https://backstage.io/docs/auth/service-to-service-auth for
-  # information on the format
-  # auth:
-  #   keys:
-  #     - secret: ${BACKEND_SECRET}
   baseUrl: http://localhost:7007
   listen:
     port: 7007
-    # Uncomment the following host directive to bind to specific interfaces
-    # host: 127.0.0.1
   csp:
-    connect-src: ["'self'", 'http:', 'https:']
-    # Content-Security-Policy directives follow the Helmet format: https://helmetjs.github.io/#reference
-    # Default Helmet Content-Security-Policy values can be removed by setting the key to false
+    connect-src: ["'self'", "http:", "https:"]
   cors:
     origin: http://localhost:3000
     methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
     credentials: true
-  # This is for local development only, it is not recommended to use this in production
-  # The production database configuration is stored in app-config.production.yaml
   database:
     client: better-sqlite3
     connection: ':memory:'
-    # workingDirectory: /tmp # Use this to configure a working directory for the scaffolder, defaults to the OS temp-dir
 integrations:
   github:
     - host: github.com
       token: ${GITHUB_TOKEN}
 techdocs:
-  builder: 'local' # Alternatives - 'external'
+  builder: local
   generator:
-    runIn: 'docker' # Alternatives - 'local'
+    runIn: docker
   publisher:
-    type: 'local' # Alternatives - 'googleGcs' or 'awsS3'. Read documentation for using alternatives.
+    type: local
 auth:
-  environment: production
+  environment: development
   providers:
     github:
       development:
-        clientId: ${GITHUB_CLIENT_ID}
-        clientSecret: ${GITHUB_CLIENT_SECRET}
+        clientId: ${GITHUB_CLIENT_ID_DEV}
+        clientSecret: ${GITHUB_CLIENT_SECRET_DEV}
+        callbackUrl: http://localhost:7007/api/auth/github/handler/frame
         signIn:
           resolvers:
             - resolver: usernameMatchingUserEntityName
 catalog:
   providers:
     github:
-      # the provider ID can be any camelCase string
       providerId:
-        organization: 'vercevo' # string
-        catalogPath: '/catalog-info.yaml' # string
+        organization: 'vercevo'
+        catalogPath: '/catalog-info.yaml'
         filters:
-          branch: 'main' # string
-          repository: '.*' # Regex
+          branch: 'main'
+          repository: '.*'
     githubOrg:
-      - id: production
+      - id: development
         githubUrl: https://github.com
-        orgs: ['vercevo'] # your GitHub organization(s)
+        orgs: ['vercevo']
         schedule:
           initialDelay: {seconds: 5}
           frequency: {hours: 1}
@@ -74,22 +61,7 @@ catalog:
   rules:
     - allow: [Component, System, API, Resource, Location]
   useUrlReadersSearch: true
-kubernetes:
-  serviceLocatorMethod:
-    type: 'multiTenant'
-  clusterLocatorMethods:
-    - type: 'config'
-      clusters:
-        - url: https://<your-k3s-api-endpoint>:6443
-          name: raspberrypi-k3s
-          authProvider: 'serviceAccount'
-          skipTLSVerify: false # or true if you want to skip, but better to use caData
-          serviceAccountToken: ${K8S_TOKEN} # or paste the token here (safer to load from env)
-          caData: ${K8S_CA_DATA}
 permission:
-  # setting this to `false` will disable permissions
   enabled: true
-argocd:
-  baseUrl: https://argo.bergtobias.com
 logger:
   level: debug
