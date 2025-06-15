@@ -28,3 +28,5 @@ jobs:
           IMAGE_NAME=ghcr.io/${{ github.repository }}
           GIT_SHA=${{ github.sha }}
           docker push $IMAGE_NAME:$GIT_SHA
+          docker tag $IMAGE_NAME:$GIT_SHA $IMAGE_NAME:latest
+          docker push $IMAGE_NAME:latest
