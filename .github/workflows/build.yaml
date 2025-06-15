@@ -29,9 +29,12 @@ jobs:
         name: Get short commit SHA
         run: |
           echo "short_sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
-      - name: Build and Push Docker image
+      - name: Build and Push Docker image with cache
         run: |-
           docker buildx build \
-            --platform linux/arm64,linux/amd64 \
+            --platform linux/amd64,linux/arm64 \
+            --cache-from=type=gha \
+            --cache-to=type=gha,mode=max \
             -t ghcr.io/${{ github.repository_owner }}/eggman:${{ steps.get-sha.outputs.short_sha }} \
+            -t ghcr.io/${{ github.repository_owner }}/eggman:latest \
             --push .
