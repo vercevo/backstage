@@ -1,4 +1,4 @@
-name: Build and Push Docker Image
+name: Build and Push ARM64 Docker Image
 on:
   push:
     branches:
@@ -10,19 +10,25 @@ jobs:
   build-and-push:
     runs-on: macos-latest
     permissions:
-      contents: read
       packages: write
+      contents: read
     outputs:
       short_sha: ${{ steps.get-sha.outputs.short_sha }}
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v3
-      - name: Show runner architecture
-        run: uname -m
-        # Expect output: arm64 on macos-latest ARM runner
+      - name: Get short commit SHA
+        id: get-sha
+        run: echo "short_sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
-      - name: Inspect buildx builder
+        with:
+          install: true
+      - name: Remove existing builder (ignore errors)
+        run: docker buildx rm mybuilder || true
+      - name: Create new builder and use it
+        run: docker buildx create --use --name mybuilder
+      - name: Inspect builder
         run: docker buildx inspect --bootstrap
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v2
@@ -30,13 +36,16 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - id: get-sha
-        name: Get short commit SHA
-        run: echo "short_sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
-      - name: Build and push Docker image with cache
+      - name: Show Docker and Buildx info (debug)
+        run: |
+          docker version
+          docker info
+          docker buildx version
+          docker buildx ls
+      - name: Build and Push Docker image with cache
         run: |
           docker buildx build \
-            --platform linux/arm64,linux/amd64 \
+            --platform linux/arm64 \
             --cache-from=type=gha \
             --cache-to=type=gha,mode=max \
             -t ghcr.io/${{ github.repository_owner }}/backstage:${{ steps.get-sha.outputs.short_sha }} \
