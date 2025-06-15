@@ -3,13 +3,15 @@ auth:
   providers:
     github:
       production:
-        clientId: ${GITHUB_CLIENT_ID_PROD}
-        clientSecret: ${GITHUB_CLIENT_SECRET_PROD}
+        clientId: ${GITHUB_CLIENT_ID}
+        clientSecret: ${GITHUB_CLIENT_SECRET}
         callbackUrl: https://backstage.bergtobias.com/api/auth/github/handler/frame
         signIn:
           resolvers:
             - resolver: usernameMatchingUserEntityName
 kubernetes:
+  serviceLocatorMethod:
+    type: singleTenant
   clusterLocatorMethods:
     - type: config
       clusters:
@@ -24,4 +26,4 @@ kubernetes:
 integrations:
   github:
     - host: github.com
-      token: ${GITHUB_INTEGRATION_TOKEN}
+      token: ${GITHUB_TOKEN}
