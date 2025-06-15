@@ -3,6 +3,8 @@ kind: Component
 metadata:
   name: backstage
   description: An example of a Backstage application.
+  links:
+    - url: https://backstage.bergtobias.com
 spec:
   type: website
   owner: github:team:eggmans
