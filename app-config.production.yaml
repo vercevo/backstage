@@ -2,7 +2,7 @@ auth:
   environment: production
   providers:
     github:
-      development:
+      production:
         clientId: ${GITHUB_CLIENT_ID}
         clientSecret: ${GITHUB_CLIENT_SECRET}
 kubernetes:
@@ -17,13 +17,6 @@ kubernetes:
           caData: ${K8_CA_DATA}
           namespace:
             - '*'
-proxy:
-  '/argocd/api':
-    target: https://argo.bergtobias.com/api/v1/
-    changeOrigin: true
-    secure: false # if you have self-signed certs
-    headers:
-      $env: ARGOCD_AUTH_TOKEN
 integrations:
   github:
     - host: github.com
