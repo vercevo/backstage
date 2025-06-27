@@ -34,7 +34,6 @@ auth:
       development:
         clientId: ${GITHUB_CLIENT_ID}
         clientSecret: ${GITHUB_CLIENT_SECRET}
-        callbackUrl: http://localhost:7007/api/auth/github/handler/frame
         signIn:
           resolvers:
             - resolver: usernameMatchingUserEntityName
