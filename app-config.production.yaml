@@ -2,3 +2,5 @@ backend:
   database:
     client: pg
     connection: ${POSTGRES_CONNECTION_STRING}
+  cors:
+    origin: ${BACKEND_CORS_ORIGIN}
