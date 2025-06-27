@@ -1,0 +1,4 @@
+backend:
+  database:
+    client: pg
+    connection: ${POSTGRES_CONNECTION_STRING}
