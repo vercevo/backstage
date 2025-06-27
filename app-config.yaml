@@ -41,12 +41,12 @@ auth:
 catalog:
   providers:
     github:
-      providerId:
-        organization: 'vercevo'
-        catalogPath: '/catalog-info.yaml'
+      - host: github.com
+        organization: vercevo
+        catalogPath: /catalog-info.yaml
         filters:
-          branch: 'main'
-          repository: '.*'
+          branch: main
+          repository: .*
     githubOrg:
       - id: production
         githubUrl: https://github.com
@@ -55,7 +55,7 @@ catalog:
           initialDelay: {seconds: 5}
           frequency: {hours: 1}
           timeout: {minutes: 50}
-        catalogPath: '/catalog-info.yaml'
+        catalogPath: /catalog-info.yaml
   import:
     entityFilename: catalog-info.yaml
     pullRequestBranchName: backstage-integration
