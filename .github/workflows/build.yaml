@@ -1,4 +1,4 @@
-name: Build and Push ARM64 Docker Image
+name: Build and Push Docker Image
 on:
   push:
     branches:
@@ -8,7 +8,7 @@ on:
       - main
 jobs:
   build-and-push:
-    runs-on: [self-hosted, linux, arm64]
+    runs-on: ubuntu-latest
     permissions:
       packages: write
       contents: read
