@@ -41,7 +41,8 @@ auth:
 catalog:
   providers:
     github:
-      - host: github.com
+      vercevo:
+        host: github.com
         organization: vercevo
         catalogPath: /catalog-info.yaml
         filters:
