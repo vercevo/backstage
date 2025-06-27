@@ -10,7 +10,8 @@ backend:
   csp:
     connect-src: ["'self'", "http:", "https:"]
   cors:
-    origin: http://localhost:7000
+    origin:
+      - http://localhost:7000
     methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
     credentials: true
   database:
@@ -27,13 +28,13 @@ techdocs:
   publisher:
     type: local
 auth:
-  environment: production
+  environment: development
   providers:
     github:
-      production:
+      development:
         clientId: ${GITHUB_CLIENT_ID}
         clientSecret: ${GITHUB_CLIENT_SECRET}
-        callbackUrl: ${BACKEND_BASEURL}/api/auth/github/handler/frame
+        callbackUrl: http://localhost:7007/api/auth/github/handler/frame
         signIn:
           resolvers:
             - resolver: usernameMatchingUserEntityName

@@ -3,10 +3,22 @@ app:
 backend:
   baseUrl: https://backstage.bergtobias.com
   cors:
-    origin: https://backstage.bergtobias.com
+    origin:
+      - https://backstage.bergtobias.com
     credentials: true
     methods: [GET, POST, PUT, DELETE, OPTIONS]
     allowedHeaders: ['Authorization', 'Content-Type']
   database:
     client: pg
     connection: ${POSTGRES_CONNECTION_STRING}
+auth:
+  environment: production
+  providers:
+    github:
+      production:
+        clientId: ${GITHUB_CLIENT_ID}
+        clientSecret: ${GITHUB_CLIENT_SECRET}
+        callbackUrl: https://backstage.bergtobias.com/api/auth/github/handler/frame
+        signIn:
+          resolvers:
+            - resolver: usernameMatchingUserEntityName
