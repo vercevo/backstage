@@ -26,10 +26,9 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build and push Docker image (ARM64)
+      - name: Build and push Docker image
         run: |
           docker buildx build \
-            --platform linux/arm64 \
             -t ghcr.io/${{ github.repository_owner }}/backstage:${{ steps.get-sha.outputs.short_sha }} \
             -t ghcr.io/${{ github.repository_owner }}/backstage:latest \
             --push .

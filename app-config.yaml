@@ -1,21 +1,22 @@
 app:
   title: Scaffolded Backstage App
-  baseUrl: http://localhost:3000
+  baseUrl: ${APP_URL}
 organization:
   name: Vercevo
 backend:
-  baseUrl: http://localhost:7007
+  baseUrl: ${BACKEND_BASEURL}
   listen:
     port: 7007
   csp:
     connect-src: ["'self'", "http:", "https:"]
   cors:
-    origin: http://localhost:3000
+    origin: ${APP_URL}
     methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
     credentials: true
   database:
-    client: better-sqlite3
-    connection: ':memory:'
+    client: pg
+    connection:
+      connectionString: ${POSTGRES_CONNECTION_STRING}
 integrations:
   github:
     - host: github.com
@@ -27,13 +28,13 @@ techdocs:
   publisher:
     type: local
 auth:
-  environment: development
+  environment: production
   providers:
     github:
-      development:
-        clientId: ${GITHUB_CLIENT_ID_DEV}
-        clientSecret: ${GITHUB_CLIENT_SECRET_DEV}
-        callbackUrl: http://localhost:7007/api/auth/github/handler/frame
+      production:
+        clientId: ${GITHUB_CLIENT_ID}
+        clientSecret: ${GITHUB_CLIENT_SECRET}
+        callbackUrl: ${BACKEND_BASEURL}/api/auth/github/handler/frame
         signIn:
           resolvers:
             - resolver: usernameMatchingUserEntityName
@@ -47,7 +48,7 @@ catalog:
           branch: 'main'
           repository: '.*'
     githubOrg:
-      - id: development
+      - id: production
         githubUrl: https://github.com
         orgs: ['vercevo']
         schedule:
@@ -63,5 +64,17 @@ catalog:
   useUrlReadersSearch: true
 permission:
   enabled: true
-logger:
-  level: debug
+kubernetes:
+  serviceLocatorMethod:
+    type: singleTenant
+  clusterLocatorMethods:
+    - type: config
+      clusters:
+        - url: ${K8_URL}
+          name: homelab
+          authProvider: serviceAccount
+          skipTLSVerify: false
+          serviceAccountToken: ${K8_SERVICE_TOKEN}
+          caData: ${K8_CA_DATA}
+          namespace:
+            - '*'
