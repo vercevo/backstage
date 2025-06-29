@@ -9,3 +9,11 @@ spec:
   type: website
   owner: group:default/eggmans
   lifecycle: production
+---
+apiVersion: backstage.io/v1alpha1
+kind: Location
+metadata:
+  name: platform-systems
+spec:
+  type: url
+  target: https://github.com/vercevo/platform-infra/blob/main/systems

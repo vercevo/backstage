@@ -16,7 +16,7 @@ auth:
   providers:
     github:
       production:
-        clientId: ${GITHUB_CLIENT_ID}
+        clientId: Iv23liZxhuxGanrXZu7R
         clientSecret: ${GITHUB_CLIENT_SECRET}
         signIn:
           resolvers:

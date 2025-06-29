@@ -20,7 +20,12 @@ backend:
 integrations:
   github:
     - host: github.com
-      token: ${GITHUB_TOKEN}
+      apps:
+        - appId: 1390834
+          clientId: Iv23liZxhuxGanrXZu7R
+          clientSecret: ${GITHUB_CLIENT_SECRET}
+          webhookSecret: ${GITHUB_WEBHOOK_SECRET}
+          privateKey: ${GITHUB_PRIVATE_KEY}
 techdocs:
   builder: local
   generator:
@@ -60,8 +65,13 @@ catalog:
     entityFilename: catalog-info.yaml
     pullRequestBranchName: backstage-integration
   rules:
-    - allow: [Component, System, API, Resource, Location]
+    - allow: [Component, System, API, Resource, Location, Template]
   useUrlReadersSearch: true
+  locations:
+    - type: github-discovery
+      target: https://github.com/vercevo/platform-infra
+      filters:
+        - path: systems/
 permission:
   enabled: true
 kubernetes:
