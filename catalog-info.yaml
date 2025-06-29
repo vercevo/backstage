@@ -7,5 +7,5 @@ metadata:
     - url: https://backstage.bergtobias.com
 spec:
   type: website
-  owner: github:team:eggmans
+  owner: group:default/eggmans
   lifecycle: production
